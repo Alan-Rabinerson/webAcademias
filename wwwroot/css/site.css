@@ -1,22 +1,28 @@
-html {
-  font-size: 14px;
+@import "tailwindcss";
+
+@font-face {
+    font-family: Raleway, sans-serif;
+    src: url(~/fonts/Raleway/Raleway-VariableFont_wght.ttf) format('woff2');
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+@theme {
+    --color-azul: #6988b7;
+    --color-negro-texto: #333;
+    --color-negro-transparente: #00000066;
+    --color-gris: #676767;
+    --font-primary: Raleway, sans-serif
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+@layer components{
+    body{
+        @apply font-primary text-negro-texto
+    }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
+    .hero{
+        @apply bg-[url(../../assets/images/countdown.jpg)] flex items-center justify-center bg-center h-107.25 gap-10 w-screen bg-repeat
+    }
 
-body {
-  margin-bottom: 60px;
+
+
+    
 }

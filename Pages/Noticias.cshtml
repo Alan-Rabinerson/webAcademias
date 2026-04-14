@@ -1,0 +1,50 @@
+﻿@page "/Noticias"
+@model WebAcademias.Pages.NoticiasModel
+@{
+    ViewData["Title"] = "Noticias";
+}
+
+
+<div class="bg-blanco w-full">
+    <section class="relative overflow-hidden bg-azul-oscuro pb-12 pt-22 md:pt-40">
+
+        <div class="mx-auto w-full max-w-6xl px-6 md:px-10 lg:px-16">
+            <h1 class="text-4xl font-bold text-blanco mb-4">Noticias</h1>
+            <p class="text-lg text-blanco/80">Mantente informado sobre las últimas novedades, eventos y noticias relacionadas con nuestras academias en Menorca.</p>
+        </div>
+    </section>
+
+    <section class="mx-auto w-full max-w-7xl px-6 py-8 md:px-10 lg:px-16">
+        @if (!string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <h2 class="text-3xl font-bold mb-4 text-left w-full">Resultados para "@Model.Search"</h2>
+        }
+        else
+        {
+            <h2 class="text-3xl font-bold mb-4 text-left w-full">Ultimas noticias</h2>
+        }
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 contenedor-noticias">
+            @{
+                foreach (var noticia in Model.noticias)
+                {
+                    var imgRuta = noticia.ImagenRuta ?? string.Empty;
+                    <a href="/noticia/@noticia.Id" class="noticia">
+                        <img src="@imgRuta" alt='@(string.IsNullOrWhiteSpace(noticia.ImagenNombre) ? "Imagen de noticia" : noticia.ImagenNombre)' class="w-full h-auto rounded-md mb-4 " />
+                        <h3 class="text-lg font-semibold p-4">@noticia.Titulo</h3>
+                        <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.Fecha.ToString("d 'de' MMMM 'de' yyyy")</span>                        <p class="text-gris text-base mt-2 p-4">@noticia.Subtitulo</p>
+                    </a>
+                    <script>
+                        console.log("imgRuta: @imgRuta");
+                    </script>
+                }
+            }
+
+        </div>
+    </section>
+    <div class="pagination" id="pagination"> 
+        <a href="#" id="prev">Anterior</a>
+        <span id="numbers-container" class="inline-flex"></span>
+        <a href="#" id="next">Siguiente</a>
+    </div>
+    <div id="page-numbers"></div>
+</div>
