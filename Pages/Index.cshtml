@@ -29,7 +29,15 @@
     <section class="busqueda">
         <h3 class="text-negro-texto font-thin">Buscador de centros y servicios</h3>    
         <div class="botones">
-                        
+             <ul>
+                @{
+                    foreach (var item in Model.Services)
+                    {
+                        <li><a href="@item.Url">@item.Name</a></li>
+                    }
+
+                }
+             </ul>           
         </div>
     </section>
 </div>
