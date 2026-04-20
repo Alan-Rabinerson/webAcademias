@@ -2,6 +2,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<WebAcademias.Data.NoticiasRepository>();
+builder.Services.AddScoped<WebAcademias.Data.CategoriasRepository>();
+builder.Services.AddScoped<WebAcademias.Data.AcademiasRepository>();
 
 var app = builder.Build();
 

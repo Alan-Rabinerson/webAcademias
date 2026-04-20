@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient; // o Microsoft.Data.SqlClient
 
-namespace TuProyecto.Repositories 
+namespace WebAcademias.Data 
 {
     public class AcademiasRepository
     {
@@ -96,17 +96,17 @@ namespace TuProyecto.Repositories
             return listaAcademias;
         }
 
-        public List<Academia> BuscarAcademiasPorCategoria(string query)
+        public List<Academia> BuscarAcademiasPorCategoria(long id)
+        {
+            var listaAcademias = new List<Academia>();
+            using (SqlConnection connection = new(_connectionString))
             {
-                var listaAcademias = new List<Academia>();
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    connection.Open();
-                    string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a WHERE @query IN (c.cat_nombre from dbo.aca_categorias c LEFT JOIN dbo.aca_academia_categoria ac ON c.cat_id = ac.acat_categoria WHERE ac.acat_academia = a.aca_id)";
+                connection.Open();
+                    string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a WHERE a.aca_id IN (SELECT ac.acat_academia FROM dbo.aca_academia_categoria ac WHERE ac.acat_categoria = @CategoryId)";
                     
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
-                        command.Parameters.AddWithValue("@query", $"%{query}%");
+                        command.Parameters.AddWithValue("@CategoryId", id);
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())

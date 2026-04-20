@@ -1,7 +1,10 @@
 ﻿@page
+@using WebAcademias.Data
 @model IndexModel
+
 @{
     ViewData["Title"] = "Home page";
+    
 }
 
 <div class="text-center">
@@ -27,15 +30,18 @@
         </div>
     </section>
     <section class="busqueda">
-        <h3 class="text-negro-texto font-thin">Buscador de centros y servicios</h3>    
+        <h3 class="text-negro-texto font-thin text-4xl">Buscador de centros y servicios</h3>    
         <div class="botones">
-             <ul>
+             <ul class="flex items-center flex-wrap gap-2">
                 @{
-                    foreach (var item in Model.Services)
+                    var debug = 1;
+                    foreach (var categoria in Model.categorias)
                     {
-                        <li><a href="@item.Url">@item.Name</a></li>
+                        debug++;
+                        Console.WriteLine(categoria.Nombre);
+                        var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
+                        <li class="bg-azul w-fit rounded-lg p-2"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
                     }
-
                 }
              </ul>           
         </div>

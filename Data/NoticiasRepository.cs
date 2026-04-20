@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient; // o Microsoft.Data.SqlClient
 
-namespace TuProyecto.Repositories 
+namespace WebAcademias.Data 
 {
     public class NoticiasRepository
     {
@@ -48,7 +48,7 @@ namespace TuProyecto.Repositories
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, n.not_cuerpo, img.img_path, img.img_nombre, na.noa_asociacion FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion na ON n.not_id = na.noa_noticia WHERE na.noa_asociacion = 'PIM' ORDER BY n.not_id DESC";
+                string query = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, n.not_cuerpo, img.img_path, img.img_nombre, na.noa_asociacion FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion na ON n.not_id = na.noa_noticia WHERE na.noa_asociacion = 'ACA' ORDER BY n.not_id DESC";
                 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -109,7 +109,7 @@ namespace TuProyecto.Repositories
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string sqlQuery = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, img.img_path, img.img_nombre FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion AS na ON n.not_id = na.noa_noticia WHERE (n.not_titulo LIKE @query OR n.not_subtitulo LIKE @query OR n.not_cuerpo LIKE @query) AND na.noa_asociacion = 'PIM' ORDER BY n.not_id DESC";
+                string sqlQuery = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, img.img_path, img.img_nombre FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion AS na ON n.not_id = na.noa_noticia WHERE (n.not_titulo LIKE @query OR n.not_subtitulo LIKE @query OR n.not_cuerpo LIKE @query) AND na.noa_asociacion = 'ACA' ORDER BY n.not_id DESC";
                 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {

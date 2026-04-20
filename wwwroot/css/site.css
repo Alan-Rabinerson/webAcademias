@@ -18,9 +18,39 @@
         @apply font-primary text-negro-texto
     }
 
+    .navbar {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .menu-toggle { 
+        @apply block md:hidden
+    }
+
+    .nav-link{
+        @apply no-underline text-negro-texto hover:text-azul
+    }
+
     .hero{
         @apply bg-[url(../../assets/images/countdown.jpg)] flex items-center justify-center bg-center h-107.25 gap-10 w-screen bg-repeat
     }
+
+
+    .botones{
+        @apply flex items-center flex-wrap w-full p-5;
+    }
+
+    .mobile-menu{
+        @apply flex flex-col md:flex-row gap-2 items-center justify-center
+    }
+
+
+
 
 
 
