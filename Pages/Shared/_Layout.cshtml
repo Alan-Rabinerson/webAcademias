@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Academias Menorca</title>
     <link rel="stylesheet" href="~/lib/tailwind/tailwind.css" />
-    <link rel="stylesheet" href="~/WebAcademias.styles.css" asp-append-version="true" />
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
@@ -14,51 +13,71 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow p-3">
-            <img class="navbar-brand h-20 cursor-pointer" src="~/assets/images/logo.png" alt="Academias Menorca" onclick="window.location.href='/'" />
+            <img class="navbar-brand h-20 cursor-pointer" src="~/assets/images/logo.png" alt="Academias Menorca"
+                 onclick="window.location.href='/'" />
             <div class="mobile-menu">
-                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <img src="~/assets/icons/menu-icon.svg" alt="Menu" class="h-6 w-6">
-                </button>
-                <ul class="flex-col hidden list-none md:flex-row md:flex grow justify-content-end gap-4">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Asociacion">La Asociación</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Materias">Materias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Empresas">Empresas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Noticias">Noticias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Asociate">Asóciate</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Contact">Contacto</a>
-                    </li>
-                </ul>
+                    </button>
+                    <ul class="flex-col hidden list-none md:flex-row md:flex grow justify-content-end gap-4">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Asociacion">La Asociación</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Materias">Materias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Empresas">Empresas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Noticias">Noticias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Asociate">Asóciate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Contact">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+    
+        <footer class="border-t ">
+            <h4 class="text-3xl">AcademiasMenorca.com</h4>
+            <div class="container">
+                <p class="text-gray-300 text-sm text-center">Copyright &copy; 2026. todos los derechos reservados.</p>
+                <p class="text-gray-300 text-sm text-center">La copia y el uso de los textos, imágenes y archivos contenidos en este sitio web están protegidos por las leyes generales de autoría y copyright. Todos los textos pueden ser reproducidos parcialmente mediante cita indicando su procedencia. La difusión de cualquiera de las imágenes de esta web está sujeta a la normativa de la Ley de la Propiedad Intelectual.</p>
             </div>
-        </nav>
-    </header>
-    
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
+            <div class="busqueda-footer">
+                <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
+                    @{
+                        foreach (var categoria in Model.categorias)
+                        {
+                            var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
+                            <li class="bg-azul w-35 rounded-lg p-1 hover:scale-[1.05] text-center text-sm"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
+                        }
+                    }
+                    </ul>
+                    <form >
+                        <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2">
+                        <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05]">Buscar</button>
+                    </form>
+            
+                </div>
+            </footer>
 
-    
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Academias Menorca - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
+        </body>
 
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-
-</html>
+    </html>

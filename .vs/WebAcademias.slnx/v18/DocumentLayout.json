@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|c:\\users\\alanr\\documents\\practicas\\webacademias\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|solutionrelative:pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|c:\\users\\alanr\\documents\\practicas\\webacademias\\data\\categoriasrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|solutionrelative:data\\categoriasrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|c:\\users\\alanr\\documents\\practicas\\webacademias\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|solutionrelative:pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9A128FCF-E40D-0A37-CA97-B9CC4E2F45B5}|WebAcademias.csproj|c:\\users\\alanr\\documents\\practicas\\webacademias\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,26 +54,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\Pages\\Index.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\Index.cshtml.cs",
               "ToolTip": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\Pages\\Index.cshtml.cs",
               "RelativeToolTip": "Pages\\Index.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-20T12:55:02.908Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CategoriasRepository.cs",
               "DocumentMoniker": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\Data\\CategoriasRepository.cs",
               "RelativeDocumentMoniker": "Data\\CategoriasRepository.cs",
               "ToolTip": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\Data\\CategoriasRepository.cs",
               "RelativeToolTip": "Data\\CategoriasRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAswGUAAABeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-20T10:44:59.787Z",
               "EditorCaption": ""
@@ -88,8 +88,7 @@
               "RelativeToolTip": "Pages\\Noticias.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-14T10:55:53.878Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-14T10:55:53.878Z"
             },
             {
               "$type": "Document",
@@ -101,8 +100,7 @@
               "RelativeToolTip": "Data\\NoticiasRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T10:12:47.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-14T10:12:47.133Z"
             },
             {
               "$type": "Document",
@@ -112,7 +110,7 @@
               "RelativeDocumentMoniker": "Pages\\Index.cshtml",
               "ToolTip": "C:\\Users\\alanr\\Documents\\practicas\\WebAcademias\\Pages\\Index.cshtml",
               "RelativeToolTip": "Pages\\Index.cshtml",
-              "ViewState": "AgIAABMAAAAAAAAAAAAcwCUAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAFoAAAAAAAAAAADwv2AAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-14T05:50:42.443Z",
               "EditorCaption": ""

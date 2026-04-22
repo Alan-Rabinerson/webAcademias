@@ -60,6 +60,51 @@ namespace WebAcademias.Data
             }
             return categoria;
         }
+
+        public long[] ObtenerIdsCategorias()
+        {
+            var ids = new List<long>();
+            using (SqlConnection connection = new(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT Id FROM dbo.aca_categorias a";
+
+                using SqlCommand command = new(query, connection);
+                using SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    ids.Add(reader.GetInt64(0));
+                }
+            }
+            return ids.ToArray();
+        }
+
+        public Dictionary<string, double> ObtenerPorcentajesMaterias ()
+        {
+            var porcentajes = new Dictionary<string, double>();
+            using (SqlConnection connection = new(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT DISTINCT COUNT(*) FROM dbo.aca_academias_categorias WHERE cat_id IN (SELECT cat_id FROM dbo.aca_categorias a WHERE a.cat_materia = @Materia)";
+                string totalQuery = "SELECT COUNT(*) as c FROM dbo.aca_academias";
+                string[] materias = ["refuerzo escolar", "informatica", "bienestar y salud", "idiomas", "otros"];
+                using SqlCommand command = new(query, connection);
+                using SqlCommand totalCommand = new(totalQuery, connection);
+                using SqlDataReader totalReader = totalCommand.ExecuteReader();
+                totalReader.Read();
+                var total = totalReader.GetInt32(0);
+                totalReader.Close();
+                foreach (string materia in materias)
+                {
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Materia", materia);
+                    using SqlDataReader reader = command.ExecuteReader();
+                    double porcentaje = reader.Read() ? reader.GetInt32(0) * 100.0 / total :0;
+                    porcentajes.Add(materia, porcentaje);
+                }
+            }
+            return porcentajes;
+        }
     }
 
     public class Categoria

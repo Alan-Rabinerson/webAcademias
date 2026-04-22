@@ -71,7 +71,7 @@ wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
-wwwroot\lib\tailwind\tailwind.css
+wwwroot\css\site.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
@@ -92,4 +92,13 @@ wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
 wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
 wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
 wwwroot\assets\icons\menu-icon.svg
-wwwroot\css\site.css
+wwwroot\lib\tailwind\tailwind.css
+wwwroot\assets\images\12079609_1048688861822145_244351213138682862_n.jpg
+wwwroot\assets\images\dharana.png
+wwwroot\assets\images\team2.jpg
+wwwroot\assets\images\team33.jpg
+wwwroot\assets\images\team5.jpg
+wwwroot\assets\icons\people-group-solid.png
+wwwroot\assets\icons\graduation-cap-solid.png
+wwwroot\assets\icons\thumbs-up-solid-full.svg
+wwwroot\assets\icons\rocket-solid-full.svg

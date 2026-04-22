@@ -6,44 +6,99 @@
     ViewData["Title"] = "Home page";
     
 }
-
-<div class="text-center">
+<script>
+    window.porcentajesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.porcentajes));
+</script>
+<script src="~/js/grafico.js"></script>
+<div class="text-center py-3">
     <section class="hero">
-        <div class="bg-negro-transparente w-49 p-1">
-            <h1 class="text-6xl text-white">45</h1>
+        <div class="bg-negro-transparente h-49 p-3 flex flex-col items-center justify-center gap-2">
+            <h1 class="text-6xl text-white font-extrabold">45</h1>
             <h2 class="lead text-white text-2xl font-bold">PROFESORES</h2>
         </div>
 
-        <div class="bg-negro-transparente w-49 p-1">
-            <h1 class="text-6xl text-white">11</h1>
+        <div class="bg-negro-transparente h-49 p-3 flex flex-col items-center justify-center gap-2">
+            <h1 class="text-6xl text-white font-extrabold">11</h1>
             <h2 class="lead text-white text-2xl font-bold">CENTROS</h2>
         </div>
 
-        <div class="bg-negro-transparente w-49 p-1">
-            <h1 class="text-6xl text-white">35</h1>
+        <div class="bg-negro-transparente h-49 p-3 flex flex-col items-center justify-center gap-2">
+            <h1 class="text-6xl text-white font-extrabold">35</h1>
             <h2 class="lead text-white text-2xl font-bold">AULAS</h2>
         </div>
 
-        <div class="bg-negro-transparente w-49 p-1">
-            <h1 class="text-6xl text-white">1200</h1>
+        <div class="bg-negro-transparente h-49 p-3 flex flex-col items-center justify-center gap-2">
+            <h1 class="text-6xl text-white font-extrabold">1200</h1>
             <h2 class="lead text-white text-2xl font-bold">ALUMNOS</h2>
         </div>
     </section>
-    <section class="busqueda">
+    <section class="busqueda py-3">
         <h3 class="text-negro-texto font-thin text-4xl">Buscador de centros y servicios</h3>    
         <div class="botones">
-             <ul class="flex items-center flex-wrap gap-2">
+            <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
                 @{
-                    var debug = 1;
                     foreach (var categoria in Model.categorias)
                     {
-                        debug++;
-                        Console.WriteLine(categoria.Nombre);
                         var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
-                        <li class="bg-azul w-fit rounded-lg p-2"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
+                        <li class="bg-azul w-27.5 rounded-lg p-2 hover:scale-[1.05] "><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
                     }
                 }
-             </ul>           
+            </ul>           
+            <form action="" class="w-[80%]">
+                <input type="text" placeholder="Buscar..."  class=" bg-azul placeholder:text-white text-white rounded-md p-2">
+                <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05]">Buscar</button>
+            </form>
+        </div>
+    </section>
+    <section class="destacados">
+        <h2 class="text-azul text-4xl">Academias Menorca</h2>
+        <h2 class="text-gray-600 font-extrabold text-4xl">Invierte en tu futuro</h2>
+
+        <div class="flex items-center justify-center gap-5 flex-wrap py-8">
+            <div class="destacado">
+                <button class="boton-destacado">
+                    <img src="~/assets/icons/graduation-cap-solid.png" alt="Gorro de graduación" >
+                </button>
+                <div class="texto-destacado">
+                    <h3 class="text-azul text-xl font-bold">Innovando en formación</h3>
+                    <p>Nuestro centros asociados estan en contante evolución y cuentan con las últimas novedades en formación.</p>
+                </div>
+            </div>
+            <div class="destacado">
+                <button class="boton-destacado">
+                    <img src="~/assets/icons/people-group-solid.png" alt="Grupo de personas">
+                </button>
+                <div class="texto-destacado">
+                    <h3 class="text-azul text-xl font-bold">Experiencia en docencia</h3>
+                    <p>Los asociados velan en todo momento para que sus alumnos tenga el mejor asesoramiento.</p>
+                </div>
+            </div>
+            <div class="destacado">
+                <button class="boton-destacado">
+                    <img src="~/assets/icons/thumbs-up-solid-full.svg" alt="Pulgara arriba">
+                </button>
+                <div class="texto-destacado">
+                    <h3 class="text-azul text-xl font-bold">Profesores cualificados</h3>
+                    <p>Realizamos un selección de personal con el objetivo de ofrecer un servicio profesional de calidad.</p>
+                </div>
+            </div>
+            <div class="destacado">
+                <button class="boton-destacado">
+                    <img src="~/assets/icons/rocket-solid-full.svg" alt="Cohete">
+                </button>
+                <div class="texto-destacado">
+                    <h3 class="text-azul text-xl font-bold">Garantia de calidad</h3>
+                    <p>Todo los centros estan acreditados  conforme a las leyes vigentes y tiene los permisos en regla</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+    <section class="porcentajes">
+    
+        <h2>Materias que más se ofrecen en nuestros centros asociados</h2>
+        <div class="grafico">
         </div>
     </section>
 </div>
