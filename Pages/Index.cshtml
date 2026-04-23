@@ -94,11 +94,36 @@
 
         </div>
     </section>
-    
-    <section class="porcentajes">
-    
-        <h2>Materias que más se ofrecen en nuestros centros asociados</h2>
-        <div class="grafico">
+    <section class="noticias fade-in">
+        <h2 class="text-2xl font-bold mb-4 mt-4">Noticias</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @{
+                var noticias = Model.noticias;
+                foreach (var noticia in noticias) {
+                    <a href="/noticia/@noticia.Id" class="noticia">
+                        <img src="@noticia.ImagenRuta" alt='@(string.IsNullOrWhiteSpace(noticia.ImagenNombre) ? "Imagen de noticia" : noticia.ImagenNombre)' class="w-full h-auto rounded-md mb-4 " />
+                        <h3 class="text-lg font-semibold p-4">@noticia.Titulo</h3>
+                        <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.Fecha.ToString("d 'de' MMMM 'de' yyyy")</span>
+                        <p class="text-gris text-base mt-2 p-4">@noticia.Subtitulo</p>
+                    </a>
+                }
+            }
+        </div>
+    </section>    
+    <section class="academias">
+        <h2 class="text-2xl font-bold mb-4 mt-4">Centros destacados</h2>
+        <div class="grid grid-cols-2 gap-6">
+            @{
+                var academias = Model.academias;
+                foreach (var academia in academias) {
+                    <a href="/academia/@(string.IsNullOrWhiteSpace(academia.Nombre) ? "#" : academia.Nombre.Replace(" ", "-"))" class="academia">
+                        <img src="@academia.LogoRuta" alt='@(string.IsNullOrWhiteSpace(academia.Nombre) ? academia.Nombre : "Logo de academia")' class="w-30 z-50 h-30 rounded-full -top-1 left-4 absolute" />
+                        <h3 class="text-lg font-semibold p-4">@academia.Nombre</h3>
+                        <span class="text-azul text-sm font-semibold p-4 ">@(!string.IsNullOrWhiteSpace(academia.Poblacion) ? $"Población: {academia.Poblacion}" : string.Empty)</span>
+                        <p class="text-gris text-base mt-2 p-4">@((academia.Descripcion ?? string.Empty).Replace("<p>", " ").Replace("</p>", " "))</p>
+                    </a>
+                }
+            }
         </div>
     </section>
 </div>

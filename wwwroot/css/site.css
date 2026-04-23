@@ -10,7 +10,8 @@
     --color-negro-texto: #333;
     --color-negro-transparente: #00000066;
     --color-gris: #676767;
-    --font-primary: Raleway, sans-serif
+    --font-primary: Raleway, sans-serif;
+    --color-blanco: #fafafa;
 }
 
 @layer components{
@@ -73,10 +74,34 @@
         @apply text-center p-4 w-60 text-sm;
     }
 
+    .pagination {
+        @apply text-center mb-4;
+    }
 
+    .pagination a {
+        @apply text-[#007BFF] px-4 py-2 decoration-0 my-1.5 rounded-md hover:bg-[#007BFF]  hover:text-white transition-colors duration-300;
+    }
 
+    .pagination.active{
+        @apply bg-[#007BFF] text-white;
+    }
+    #page-numbers {
+        @apply mt-5 text-sm;
+    }
 
+    .noticia {
+        @apply bg-blanco rounded-xl text-center transition-all duration-500 flex items-center hover:transform-[scale(1.02)] shadow-2xl p-4 flex-col overflow-hidden border border-gris/20 hover:shadow-2xl;
+    }
 
+    .noticias {
+        @apply w-full px-6 mb-4 ;
+    }
 
-    
+    .academias {
+        @apply w-full px-6 mb-4 ;
+    }
+
+    .academia {
+        @apply bg-blanco rounded-xl text-center transition-all duration-500 flex items-center hover:transform-[scale(1.02)] shadow-xl p-4 flex-col overflow-hidden border border-gris/20 hover:shadow-2xl relative z-1;
+    }
 }

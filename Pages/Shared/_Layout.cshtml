@@ -1,6 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject WebAcademias.Data.CategoriasRepository _categoriasRepository
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,10 +58,10 @@
             <div class="busqueda-footer">
                 <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
                     @{
-                        foreach (var categoria in Model.categorias)
+                        foreach (var categoria in _categoriasRepository.ObtenerTodasCategorias())
                         {
                             var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
-                            <li class="bg-azul w-35 rounded-lg p-1 hover:scale-[1.05] text-center text-sm"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
+                            <li class="bg-azul w-32 rounded-lg p-1 hover:scale-[1.05] text-center text-sm"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
                         }
                     }
                     </ul>

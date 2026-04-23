@@ -12,30 +12,30 @@ namespace WebAcademias.Data
             _connectionString = configuration.GetConnectionString("PIME_SITES") ?? throw new InvalidOperationException("Connection string 'PIME_SITES' is not configured.");
         }
 
-        public Academia? ObtenerTodasAcademias()
+        public IList<Academia>? ObtenerTodasAcademias()
         {
-            Academia? academia = null;
+            var academias = new List<Academia>();
             using (SqlConnection connection = new(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a";
+                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id";
 
                 using SqlCommand command = new(query, connection);
                 using SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                while (reader.Read())
                 {
-                    academia = new Academia
+                    var academia = new Academia
                     {
-                        Id = reader.GetInt64(0),
+                        Id = reader.GetInt32(0),
                         Nombre = reader.GetString(1),
-                        Poblacion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                        Descripcion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),                        
+                        Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
                         LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4),
-                        Materia = reader.IsDBNull(5) ? null : reader.GetString(5)
                     };
+                    academias.Add(academia);
                 }
             }
-            return academia;
+            return academias;
         }
 
         public Academia? ObtenerAcademiaPorId(long id)
@@ -44,22 +44,20 @@ namespace WebAcademias.Data
             using (SqlConnection connection = new(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a WHERE a.aca_id = @id";
+                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_id = @id";
 
                 using SqlCommand command = new(query, connection);
                 command.Parameters.AddWithValue("@id", id);
                 using SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                while (reader.Read())
                 {
                     academia = new Academia
                     {
-                        Id = reader.GetInt64(0),
+                        Id = reader.GetInt32(0),
                         Nombre = reader.GetString(1),
-                        Poblacion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                        Descripcion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
                         LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4),
-                        Materia = reader.IsDBNull(5) ? null : reader.GetString(5)
-
                     };
                 }
             }
@@ -72,7 +70,7 @@ namespace WebAcademias.Data
             using (SqlConnection connection = new(_connectionString))
             {
                 connection.Open();
-                string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a WHERE a.aca_nombre LIKE @query OR a.aca_descripcion LIKE @query OR a.aca_poblacion LIKE @query";
+                string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_nombre LIKE @query OR a.aca_descripcion LIKE @query OR a.aca_poblacion LIKE @query";
                 
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
@@ -83,10 +81,10 @@ namespace WebAcademias.Data
                         {
                             listaAcademias.Add(new Academia
                             {
-                                Id = reader.GetInt64(0),
+                                Id = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Poblacion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                Descripcion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
                                 LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4)
                             });
                         }
@@ -102,7 +100,7 @@ namespace WebAcademias.Data
             using (SqlConnection connection = new(_connectionString))
             {
                 connection.Open();
-                    string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, a.aca_logo FROM dbo.aca_academias a WHERE a.aca_id IN (SELECT ac.acat_academia FROM dbo.aca_academia_categoria ac WHERE ac.acat_categoria = @CategoryId)";
+                    string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_id IN (SELECT ac.acat_academia FROM dbo.aca_academia_categoria ac WHERE ac.acat_categoria = @CategoryId)";
                     
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
@@ -113,10 +111,10 @@ namespace WebAcademias.Data
                             {
                                 listaAcademias.Add(new Academia
                                 {
-                                    Id = reader.GetInt64(0),
+                                    Id = reader.GetInt32(0),
                                     Nombre = reader.GetString(1),
-                                    Poblacion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    Descripcion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                    Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                    Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
                                     LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4)
                                 });
                             }
