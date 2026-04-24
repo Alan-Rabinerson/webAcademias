@@ -11,7 +11,7 @@ namespace WebAcademias.Data
         {
             _connectionString = configuration.GetConnectionString("PIME_SITES") ?? throw new InvalidOperationException("Connection string 'PIME_SITES' is not configured.");
         }
-
+  
         public IList<Academia>? ObtenerTodasAcademias()
         {
             var academias = new List<Academia>();
