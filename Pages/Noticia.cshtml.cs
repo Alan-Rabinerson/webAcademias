@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebAcademias.Data;
-
+using WebAcademias.Models;
+using Microsoft.EntityFrameworkCore;
 namespace WebAcademias.Pages
 {
     public class NoticiaModel : PageModel

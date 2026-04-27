@@ -7,7 +7,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<WebAcademias.Data.NoticiasRepository>();
 builder.Services.AddScoped<WebAcademias.Data.CategoriasRepository>();
 builder.Services.AddScoped<WebAcademias.Data.AcademiasRepository>();
-builder.Services.AddDbContext<WebAcademias.Data.BloggingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PIME_SITES")));
+builder.Services.AddDbContext<WebAcademias.Data.AcademiasContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PIME_SITES")));
 
 var app = builder.Build();
 

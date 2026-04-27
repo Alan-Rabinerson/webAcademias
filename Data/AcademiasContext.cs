@@ -5,13 +5,13 @@ using WebAcademias.Models;
 
 namespace WebAcademias.Data;
 
-public partial class BloggingContext : DbContext
+public partial class AcademiasContext : DbContext
 {
-    public BloggingContext()
+    public AcademiasContext()
     {
     }
 
-    public BloggingContext(DbContextOptions<BloggingContext> options)
+    public AcademiasContext(DbContextOptions<AcademiasContext> options)
         : base(options)
     {
     }
@@ -25,6 +25,14 @@ public partial class BloggingContext : DbContext
     public virtual DbSet<AcaImagene> AcaImagenes { get; set; }
 
     public virtual DbSet<AcaTelefono> AcaTelefonos { get; set; }
+
+    public virtual DbSet<GesImagenes> GesImagenes { get; set; }
+
+    public virtual DbSet<GesNoticia> GesNoticias { get; set; }
+
+    public virtual DbSet<GesNoticiaAsociacion> GesNoticiaAsociaciones { get; set; }
+
+    public virtual DbSet<GesNoticiaImagen> GesNoticiaImagenes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -189,6 +197,121 @@ public partial class BloggingContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("tel_numero");
+        });
+
+        modelBuilder.Entity<GesImagenes>(entity =>
+        {
+            entity.HasKey(e => e.ImgId);
+
+            entity.ToTable("ges_imagenes");
+
+            entity.Property(e => e.ImgId).HasColumnName("img_id");
+            entity.Property(e => e.ImgPath)
+                .HasMaxLength(150)
+                .HasColumnName("img_path");
+            entity.Property(e => e.ImgFecha)
+                .HasColumnType("datetime")
+                .HasColumnName("img_fecha");
+            entity.Property(e => e.ImgNombre)
+                .HasMaxLength(150)
+                .HasColumnName("img_nombre");
+        });
+
+        modelBuilder.Entity<GesNoticia>(entity =>
+        {
+            entity.HasKey(e => e.NotId);
+
+            entity.ToTable("ges_noticias");
+
+            entity.Property(e => e.NotId).HasColumnName("not_id");
+            entity.Property(e => e.NotFecha)
+                .HasColumnType("datetime")
+                .HasColumnName("not_fecha");
+            entity.Property(e => e.NotTitulo)
+                .HasMaxLength(250)
+                .HasColumnName("not_titulo");
+            entity.Property(e => e.NotTituloEn)
+                .HasMaxLength(250)
+                .HasColumnName("not_titulo_en");
+            entity.Property(e => e.NotTituloCa)
+                .HasMaxLength(250)
+                .HasColumnName("not_titulo_ca");
+            entity.Property(e => e.NotSubtitulo)
+                .HasMaxLength(350)
+                .IsFixedLength()
+                .HasColumnName("not_subtitulo");
+            entity.Property(e => e.NotSubtituloEn)
+                .HasMaxLength(350)
+                .IsFixedLength()
+                .HasColumnName("not_subtitulo_en");
+            entity.Property(e => e.NotSubtituloCa)
+                .HasMaxLength(350)
+                .IsFixedLength()
+                .HasColumnName("not_subtitulo_ca");
+            entity.Property(e => e.NotResumen).HasColumnName("not_resumen");
+            entity.Property(e => e.NotResumenEn).HasColumnName("not_resumen_en");
+            entity.Property(e => e.NotResumenCa).HasColumnName("not_resumen_ca");
+            entity.Property(e => e.NotCuerpo).HasColumnName("not_cuerpo");
+            entity.Property(e => e.NotCuerpoEn).HasColumnName("not_cuerpo_en");
+            entity.Property(e => e.NotCuerpoCa).HasColumnName("not_cuerpo_ca");
+            entity.Property(e => e.NotImagenPortada).HasColumnName("not_imagen_portada");
+            entity.Property(e => e.NotUrlAlias)
+                .HasMaxLength(300)
+                .HasColumnName("not_url_alias");
+            entity.Property(e => e.NotPublicada).HasColumnName("not_publicada");
+            entity.Property(e => e.NotPortada).HasColumnName("not_portada");
+            entity.Property(e => e.NotPublicarPim).HasColumnName("not_publicar_pim");
+            entity.Property(e => e.NotPublicarCar).HasColumnName("not_publicar_car");
+            entity.Property(e => e.NotPublicarBar).HasColumnName("not_publicar_bar");
+            entity.Property(e => e.NotPublicarAsc).HasColumnName("not_publicar_asc");
+            entity.Property(e => e.NotVisitas).HasColumnName("not_visitas");
+            entity.Property(e => e.NotUsuario).HasColumnName("not_usuario");
+            entity.Property(e => e.DrupalNid).HasColumnName("drupal_nid");
+            entity.Property(e => e.DrupalUid).HasColumnName("drupal_uid");
+            entity.Property(e => e.NotFechaPublicacion)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("not_fecha_publicacion");
+
+            entity.HasOne(d => d.NotImagenPortadaNavigation)
+                .WithMany(p => p.GesNoticias)
+                .HasForeignKey(d => d.NotImagenPortada)
+                .HasConstraintName("FK_ges_noticias_ges_imagenes");
+        });
+
+        modelBuilder.Entity<GesNoticiaAsociacion>(entity =>
+        {
+            entity.HasKey(e => new { e.NoaNoticia, e.NoaAsociacion });
+
+            entity.ToTable("ges_noticia_asociacion");
+
+            entity.Property(e => e.NoaNoticia).HasColumnName("noa_noticia");
+            entity.Property(e => e.NoaAsociacion)
+                .HasMaxLength(3)
+                .HasColumnName("noa_asociacion");
+
+            entity.HasOne(d => d.NoaNoticiaNavigation)
+                .WithMany(p => p.GesNoticiaAsociaciones)
+                .HasForeignKey(d => d.NoaNoticia)
+                .HasConstraintName("FK_ges_noticia_asociacion_ges_noticias");
+        });
+
+        modelBuilder.Entity<GesNoticiaImagen>(entity =>
+        {
+            entity.HasKey(e => new { e.NoiNoticia, e.NoiImagen });
+
+            entity.ToTable("ges_noticia_imagen");
+
+            entity.Property(e => e.NoiNoticia).HasColumnName("noi_noticia");
+            entity.Property(e => e.NoiImagen).HasColumnName("noi_imagen");
+            entity.Property(e => e.NoiTitulo)
+                .HasMaxLength(150)
+                .HasColumnName("noi_titulo");
+            entity.Property(e => e.NoiOrden).HasColumnName("noi_orden");
+
+            entity.HasOne(d => d.NoiNoticiaNavigation)
+                .WithMany(p => p.GesNoticiaImagenes)
+                .HasForeignKey(d => d.NoiNoticia)
+                .HasConstraintName("FK_ges_noticia_imagen_ges_noticias");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,140 +1,118 @@
-using Microsoft.Data.SqlClient; // o Microsoft.Data.SqlClient
+using Microsoft.EntityFrameworkCore;
+using WebAcademias.Models; // o Microsoft.Data.SqlClient
 
-namespace WebAcademias.Data 
+namespace WebAcademias.Data
 {
-    public class AcademiasRepository
+    public class AcademiasRepository(AcademiasContext context)
     {
-        private readonly string _connectionString;
+        private readonly AcademiasContext _context = context;
 
-        // Inyectamos la configuración para leer el appsettings.json automatícamente
-        public AcademiasRepository(IConfiguration configuration)
+        public IList<Academia> ObtenerTodasAcademias()
         {
-            _connectionString = configuration.GetConnectionString("PIME_SITES") ?? throw new InvalidOperationException("Connection string 'PIME_SITES' is not configured.");
-        }
-  
-        public IList<Academia>? ObtenerTodasAcademias()
-        {
-            var academias = new List<Academia>();
-            using (SqlConnection connection = new(_connectionString))
-            {
-                connection.Open();
-                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id";
+            var query = from aca in _context.AcaAcademias
+                        join imagenes in _context.AcaImagenes on aca.AcaLogo equals imagenes.ImgPath into imgGroup
+                        from img in imgGroup.DefaultIfEmpty()
+                        select new Academia
+                        {
+                            Id = aca.AcaId,
+                            Nombre = aca.AcaNombre,
+                            Descripcion = aca.AcaDescripcion,
+                            Poblacion = aca.AcaPoblacion,
+                            LogoRuta = img != null ? img.ImgPath : aca.AcaLogo
+                        };
 
-                using SqlCommand command = new(query, connection);
-                using SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var academia = new Academia
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1),
-                        Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),                        
-                        Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
-                        LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4),
-                    };
-                    academias.Add(academia);
-                }
-            }
-            return academias;
+            return [.. query];
         }
 
-        public Academia? ObtenerAcademiaPorId(long id)
+        public async Task<Academia?> ObtenerAcademiaPorIdAsync(long id)
         {
             Academia? academia = null;
-            using (SqlConnection connection = new(_connectionString))
+            var aca = await _context.AcaAcademias.FindAsync(id);
+            if (aca != null)
             {
-                connection.Open();
-                string query = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_id = @id";
-
-                using SqlCommand command = new(query, connection);
-                command.Parameters.AddWithValue("@id", id);
-                using SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    academia = new Academia
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1),
-                        Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
-                        Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                        LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4),
-                    };
-                }
+                var query = from academias in _context.AcaAcademias
+                            where academias.AcaId == id
+                            join imagenes in _context.AcaImagenes on academias.AcaLogo equals imagenes.ImgPath into imgGroup
+                            from img in imgGroup.DefaultIfEmpty()
+                            select new Academia
+                            {
+                                Id = academias.AcaId,
+                                Nombre = academias.AcaNombre,
+                                Descripcion = academias.AcaDescripcion,
+                                Poblacion = academias.AcaPoblacion,
+                                LogoRuta = img != null ? img.ImgPath : academias.AcaLogo
+                            };
+                academia = await query.FirstOrDefaultAsync();
             }
             return academia;
         }
 
+        public Academia? ObtenerAcademiaPorId(long id)
+        {
+            var query = from aca in _context.AcaAcademias
+                        where aca.AcaId == id
+                        join imagenes in _context.AcaImagenes on aca.AcaLogo equals imagenes.ImgPath into imgGroup
+                        from img in imgGroup.DefaultIfEmpty()
+                        select new Academia
+                        {
+                            Id = aca.AcaId,
+                            Nombre = aca.AcaNombre,
+                            Descripcion = aca.AcaDescripcion,
+                            Poblacion = aca.AcaPoblacion,
+                            LogoRuta = img != null ? img.ImgPath : aca.AcaLogo
+                        };
+            return query.FirstOrDefault();
+        }
+
         public List<Academia> BuscarAcademias(string query)
         {
-            var listaAcademias = new List<Academia>();
-            using (SqlConnection connection = new(_connectionString))
-            {
-                connection.Open();
-                string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_nombre LIKE @query OR a.aca_descripcion LIKE @query OR a.aca_poblacion LIKE @query";
-                
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@query", $"%{query}%");
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            listaAcademias.Add(new Academia
-                            {
-                                Id = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4)
-                            });
-                        }
-                    }
-                }
-            }
-            return listaAcademias;
+            var sqlQuery = from aca in _context.AcaAcademias
+                           join imagenes in _context.AcaImagenes on aca.AcaLogo equals imagenes.ImgPath into imgGroup
+                           from img in imgGroup.DefaultIfEmpty()
+                           where aca.AcaNombre.Contains(query) || (aca.AcaDescripcion != null && aca.AcaDescripcion.Contains(query)) || (aca.AcaPoblacion != null && aca.AcaPoblacion.Contains(query))
+                           select new Academia
+                           {
+                               Id = aca.AcaId,
+                               Nombre = aca.AcaNombre,
+                               Descripcion = aca.AcaDescripcion,
+                               Poblacion = aca.AcaPoblacion,
+                               LogoRuta = img != null ? img.ImgPath : aca.AcaLogo
+                           };
+            return sqlQuery.ToList();
         }
 
         public List<Academia> BuscarAcademiasPorCategoria(long id)
         {
-            var listaAcademias = new List<Academia>();
-            using (SqlConnection connection = new(_connectionString))
-            {
-                connection.Open();
-                    string sqlQuery = "SELECT a.aca_id, a.aca_nombre, a.aca_descripcion, a.aca_poblacion, i.img_path FROM dbo.aca_academias a JOIN dbo.aca_imagenes i ON a.aca_logo = i.img_id WHERE a.aca_id IN (SELECT ac.acat_academia FROM dbo.aca_academia_categoria ac WHERE ac.acat_categoria = @CategoryId)";
-                    
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@CategoryId", id);
-                        using (SqlDataReader reader = command.ExecuteReader())
+            var query = from aca in _context.AcaAcademias
+                        where aca.Cats.Any(c => c.CatId == (int)id)
+                        join imagenes in _context.AcaImagenes on aca.AcaLogo equals imagenes.ImgPath into imgGroup
+                        from img in imgGroup.DefaultIfEmpty()
+                        select new Academia
                         {
-                            while (reader.Read())
-                            {
-                                listaAcademias.Add(new Academia
-                                {
-                                    Id = reader.GetInt32(0),
-                                    Nombre = reader.GetString(1),
-                                    Poblacion = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                    Descripcion = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    LogoRuta = reader.IsDBNull(4) ? null : reader.GetString(4)
-                                });
-                            }
-                        }
-                    }
-                }
-                return listaAcademias;
-            }
+                            Id = aca.AcaId,
+                            Nombre = aca.AcaNombre,
+                            Descripcion = aca.AcaDescripcion,
+                            Poblacion = aca.AcaPoblacion,
+                            LogoRuta = img != null ? img.ImgPath : aca.AcaLogo
+                        };
+            return query.ToList();
         }
+}
 
-    
 
-    // Clase auxiliar para mapear los datos (puedes crearla en su propio archivo en una carpeta Models)
-    public class Academia
+// Clase auxiliar para mapear los datos (puedes crearla en su propio archivo en una carpeta Models)
+public class Academia
+{
+    public long Id { get; set; }
+    public string? Nombre { get; set; }
+    public string? Descripcion { get; set; }
+    public string? LogoRuta { get; set; }
+    public string? Poblacion { get; set; }
+    public string? Materia { get; set; }
+
+    public static implicit operator Academia?(AcaAcademia? v)
     {
-        public long Id { get; set; }
-        public string? Nombre { get; set; }
-        public string? Descripcion { get; set; }
-        public string? LogoRuta { get; set; }
-        public string? Poblacion { get; set; }
-        public string? Materia { get; set; }
+        throw new NotImplementedException();
     }
+}
 }

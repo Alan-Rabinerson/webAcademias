@@ -1,152 +1,128 @@
-using Microsoft.Data.SqlClient; // o Microsoft.Data.SqlClient
-
-namespace WebAcademias.Data 
+using Microsoft.Data.SqlClient;
+using WebAcademias.Models; // o Microsoft.Data.SqlClient
+using Microsoft.EntityFrameworkCore;
+namespace WebAcademias.Data
 {
-    public class NoticiasRepository
+    public class NoticiasRepository(AcademiasContext context)
     {
-        private readonly string _connectionString;
+        private readonly AcademiasContext _context = context;
 
-        // Inyectamos la configuración para leer el appsettings.json automatícamente
-        public NoticiasRepository(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("PIME_SITES") ?? throw new InvalidOperationException("Connection string 'PIME_SITES' is not configured.");
-        }
-        // Método para obtener las noticias para la pagina index
         public List<Noticia> ObtenerUltimasNoticias()
         {
-            var listaNoticias = new List<Noticia>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = "SELECT n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, n.not_cuerpo, img.img_path, img.img_nombre FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id ORDER BY n.not_id DESC";
-                
-                using (SqlCommand command = new SqlCommand(query, connection))
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        listaNoticias.Add(new Noticia
+            var query = from n in _context.GesNoticias
+                        join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
+                        from img in imgJoin.DefaultIfEmpty()
+                        orderby n.NotId descending
+                        select new Noticia
                         {
-                            Id = reader.GetInt64(0),
-                            Titulo = reader.GetString(1),
-                            Fecha = reader.GetDateTime(2),
-                            Subtitulo = reader.IsDBNull(3) ? null : reader.GetString(3),
-                            ImagenRuta = reader.IsDBNull(5) ? null : reader.GetString(5),
-                            ImagenNombre = reader.IsDBNull(6) ? null : reader.GetString(6)
-                        });
-                    }
-                }
-            }
-            return listaNoticias;
+                            Id = n.NotId,
+                            Titulo = n.NotTitulo,
+                            Fecha = n.NotFecha,
+                            Subtitulo = n.NotSubtitulo,
+                            Cuerpo = n.NotCuerpo,
+                            ImagenRuta = img != null ? img.ImgPath : null,
+                            ImagenNombre = img != null ? img.ImgNombre : null
+                        };
+
+            return query.ToList();
         }
 
         // Método para obtener las noticias para la pagina noticias
         public List<Noticia> ObtenerUltimasNoticiasIndex()
         {
-            var listaNoticias = new List<Noticia>();
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, n.not_cuerpo, img.img_path, img.img_nombre, na.noa_asociacion FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion na ON n.not_id = na.noa_noticia WHERE na.noa_asociacion = 'ACA' ORDER BY n.not_id DESC";
-                
-                using (SqlCommand command = new SqlCommand(query, connection))
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        listaNoticias.Add(new Noticia
+            var query = from n in _context.GesNoticias
+                        join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
+                        from img in imgJoin.DefaultIfEmpty()
+                        join na in _context.GesNoticiaAsociaciones on (long?)n.NotId equals (long?)na.NoaNoticia into naJoin
+                        from na in naJoin.DefaultIfEmpty()
+                        where na != null && na.NoaAsociacion == "ACA"
+                        orderby n.NotId descending
+                        select new Noticia
                         {
-                            Id = reader.GetInt64(0),
-                            Titulo = reader.GetString(1),
-                            Fecha = reader.GetDateTime(2),
-                            Subtitulo = reader.IsDBNull(3) ? null : reader.GetString(3),
-                            ImagenRuta = reader.IsDBNull(5) ? null : reader.GetString(5),
-                            ImagenNombre = reader.IsDBNull(6) ? null : reader.GetString(6)
-                        });
-                    }
-                }
-            }
-            return listaNoticias;
+                            Id = n.NotId,
+                            Titulo = n.NotTitulo,
+                            Fecha = n.NotFecha,
+                            Subtitulo = n.NotSubtitulo,
+                            Cuerpo = n.NotCuerpo,
+                            ImagenRuta = img != null ? img.ImgPath : null,
+                            ImagenNombre = img != null ? img.ImgNombre : null,
+                            Asociacion = na != null ? na.NoaAsociacion : null
+                        };
+
+            return query.ToList();
         }
 
         public Noticia? ObtenerNoticiaPorId(long id)
         {
-            Noticia? noticia = null;
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = "SELECT n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, n.not_cuerpo, img.img_path, img.img_nombre, na.noa_asociacion FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion na ON n.not_id = na.noa_noticia WHERE n.not_id = @id";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
+            var query = from n in _context.GesNoticias
+                        join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
+                        from img in imgJoin.DefaultIfEmpty()
+                        join na in _context.GesNoticiaAsociaciones on (long?)n.NotId equals (long?)na.NoaNoticia into naJoin
+                        from na in naJoin.DefaultIfEmpty()
+                        where n.NotId == id
+                        select new Noticia
                         {
-                            noticia = new Noticia
-                            {
-                                Id = reader.GetInt64(0),
-                                Titulo = reader.GetString(1),
-                                Fecha = reader.GetDateTime(2),
-                                Subtitulo = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                Cuerpo = reader.IsDBNull(4) ? null : reader.GetString(4),
-                                ImagenRuta = reader.IsDBNull(5) ? null : reader.GetString(5),
-                                ImagenNombre = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                Asociacion = reader.IsDBNull(7) ? null : reader.GetString(7)
-                            };
-                        }
-                    }
-                }
-            }
-            return noticia;
+                            Id = n.NotId,
+                            Titulo = n.NotTitulo,
+                            Fecha = n.NotFecha,
+                            Subtitulo = n.NotSubtitulo,
+                            Cuerpo = n.NotCuerpo,
+                            ImagenRuta = img != null ? img.ImgPath : null,
+                            ImagenNombre = img != null ? img.ImgNombre : null,
+                            Asociacion = na != null ? na.NoaAsociacion : null
+                        };
+
+            return query.FirstOrDefault();
+        }
+
+        public List<Noticia> BuscarNoticiasLinq(string query)
+        {
+            var SQLquery = from n in _context.GesNoticias
+                           join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
+                           from img in imgJoin.DefaultIfEmpty()
+                           join na in _context.GesNoticiaAsociaciones on (long?)n.NotId equals (long?)na.NoaNoticia into naJoin
+                           from na in naJoin.DefaultIfEmpty()
+                           where ((n.NotTitulo ?? string.Empty).Contains(query) || (n.NotSubtitulo ?? string.Empty).Contains(query) || (n.NotCuerpo ?? string.Empty).Contains(query))
+                           && na != null && na.NoaAsociacion == "ACA"
+                           orderby n.NotId descending
+                           select new Noticia
+                           {
+                               Id = n.NotId,
+                               Titulo = n.NotTitulo,
+                               Fecha = n.NotFecha,
+                               Subtitulo = n.NotSubtitulo,
+                               Cuerpo = n.NotCuerpo,
+                               ImagenRuta = img != null ? img.ImgPath : null,
+                               ImagenNombre = img != null ? img.ImgNombre : null,
+                               Asociacion = na != null ? na.NoaAsociacion : null
+                           };
+
+            return SQLquery.Take(4).ToList();
         }
 
         public List<Noticia> BuscarNoticias(string query)
         {
-            var listaNoticias = new List<Noticia>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string sqlQuery = "SELECT TOP 4 n.not_id, n.not_titulo, n.not_fecha, n.not_subtitulo, img.img_path, img.img_nombre FROM dbo.ges_noticias AS n LEFT JOIN dbo.ges_imagenes AS img ON n.not_imagen_portada = img.img_id LEFT JOIN dbo.ges_noticia_asociacion AS na ON n.not_id = na.noa_noticia WHERE (n.not_titulo LIKE @query OR n.not_subtitulo LIKE @query OR n.not_cuerpo LIKE @query) AND na.noa_asociacion = 'ACA' ORDER BY n.not_id DESC";
-                
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@query", $"%{query}%");
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            listaNoticias.Add(new Noticia
-                            {
-                                Id = reader.GetInt64(0),
-                                Titulo = reader.GetString(1),
-                                Fecha = reader.GetDateTime(2),
-                                Subtitulo = reader.IsDBNull(3) ? null : reader.GetString(3),
-                                ImagenRuta = reader.IsDBNull(4) ? null : reader.GetString(4),
-                                ImagenNombre = reader.IsDBNull(5) ? null : reader.GetString(5)
-                            });
-                        }
-                    }
-                }
-            }
-            return listaNoticias;
+            var SQLquery = from n in _context.GesNoticias
+                           join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
+                           from img in imgJoin.DefaultIfEmpty()
+                           join na in _context.GesNoticiaAsociaciones on (long?)n.NotId equals (long?)na.NoaNoticia into naJoin
+                           from na in naJoin.DefaultIfEmpty()
+                           where ((n.NotTitulo ?? string.Empty).Contains(query) || (n.NotSubtitulo ?? string.Empty).Contains(query) || (n.NotCuerpo ?? string.Empty).Contains(query))
+                           && na != null && na.NoaAsociacion == "ACA"
+                           orderby n.NotId descending
+                           select new Noticia
+                           {
+                               Id = n.NotId,
+                               Titulo = n.NotTitulo,
+                               Fecha = n.NotFecha,
+                               Subtitulo = n.NotSubtitulo,
+                               Cuerpo = n.NotCuerpo,
+                               ImagenRuta = img != null ? img.ImgPath : null,
+                               ImagenNombre = img != null ? img.ImgNombre : null,
+                               Asociacion = na != null ? na.NoaAsociacion : null
+                           };
+
+            return [.. SQLquery.Take(4)];
         }
-    }
-
-    
-
-    // Clase auxiliar para mapear los datos (puedes crearla en su propio archivo en una carpeta Models)
-    public class Noticia
-    {
-        public long Id { get; set; }
-        public string? Titulo { get; set; }
-        public DateTime Fecha { get; set; }
-        public string? Subtitulo { get; set; }
-        public string? Cuerpo { get; set; }
-        public string? Asociacion { get; set; }
-        public string? ImagenRuta { get; set; }
-        public string? ImagenNombre { get; set; }
     }
 }
