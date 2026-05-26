@@ -12,7 +12,11 @@ namespace WebAcademias.Data
             var query = from n in _context.GesNoticias
                         join img in _context.GesImagenes on (long?)n.NotImagenPortada equals (long?)img.ImgId into imgJoin
                         from img in imgJoin.DefaultIfEmpty()
+                        join na in _context.GesNoticiaAsociaciones on (long?)n.NotId equals (long?)na.NoaNoticia into naJoin
+                        from na in naJoin.DefaultIfEmpty()
+                        where na != null && na.NoaAsociacion == "ACA"
                         orderby n.NotId descending
+                        
                         select new Noticia
                         {
                             Id = n.NotId,

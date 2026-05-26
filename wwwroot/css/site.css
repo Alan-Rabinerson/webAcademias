@@ -97,8 +97,12 @@
         @apply w-full px-6 mb-4 ;
     }
 
+    .noticias-container{
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto;
+    }
+
     .academias {
-        @apply w-full px-6 mb-4 ;
+        @apply w-full px-6 mb-4 max-w-7xl mx-auto;
     }
 
     .academia {
