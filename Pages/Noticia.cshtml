@@ -1,9 +1,8 @@
 @page "/noticia/{id:long}"
 @model WebAcademias.Pages.NoticiaModel
 @{
-var noticia = Model.noticia!;
-ViewData["Title"] = noticia.Titulo;
-
+    var noticia = Model.noticia!;
+    ViewData["Title"] = noticia.Titulo;
 }
 <div class="flex flex-col gap-4 px-4 py-6 md:pt-36 lg:px-30">
     <div class="header-noticia border-b border-[#d0daea] pb-6 mb-7">
@@ -11,13 +10,13 @@ ViewData["Title"] = noticia.Titulo;
         <h2 class="text-2xl text-azul-oscuro/70">@noticia.Subtitulo</h2>
         <div class="flex items-center gap-5 flex-wrap mt-4">
             <p class="flex items-center gap-2 text-xs md:text-sm text-gris">
-                <img src="../assets/icons/fecha.svg" alt="Icono de fecha" class="w-4 h-4" />
+                <img src="~/assets/icons/fecha.svg" alt="Icono de fecha" class="w-4 h-4" />
 
                 @noticia.Fecha.ToString("dd/MM/yyyy")
             </p>
             <p class="flex items-center gap-2 text-xs md:text-sm text-gris">
-                <img src="../assets/icons/user.svg" alt="Icono de usuario" class="w-4 h-4" />
-                Equipo PIMELAB
+                <img src="~/assets/icons/user.svg" alt="Icono de usuario" class="w-4 h-4" />
+                Equipo de Academias Menorca
             </p>
         </div>
     </div>

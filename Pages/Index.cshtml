@@ -44,13 +44,13 @@
                     }
                 }
             </ul>           
-            <form action="" class="w-[80%]">
-                <input type="text" placeholder="Buscar..."  class=" bg-azul placeholder:text-white text-white rounded-md p-2">
-                <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05]">Buscar</button>
+            <form class="w-full flex items-center justify-stretch gap-2 max-w-7xl mx-auto">
+                <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2 basis-3/4">
+                <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05] basis-1/4">Buscar</button>
             </form>
         </div>
     </section>
-    <section class="destacados">
+    <section class="destacados" id="la-asociacion">
         <h2 class="text-azul text-4xl">Academias Menorca</h2>
         <h2 class="text-gray-600 font-extrabold text-4xl">Invierte en tu futuro</h2>
 
@@ -96,7 +96,7 @@
     </section>
     <section class="noticias fade-in">
         <h2 class="text-2xl font-bold mb-4 mt-4">Noticias</h2>
-        <div class="noticias-container">
+        <div class="noticias-container" id="noticias">
             @{
                 var noticias = Model.noticias;
                 foreach (var noticia in noticias) {
@@ -110,7 +110,7 @@
             }
         </div>
     </section>    
-    <section class="academias">
+    <section class="academias" id="academias">
         <h2 class="text-2xl font-bold mb-4 mt-4">Centros destacados</h2>
         <div class="grid grid-cols-2 gap-6">
             @{

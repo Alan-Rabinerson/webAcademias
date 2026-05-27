@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Academias Menorca</title>
-    <link rel="stylesheet" href="~/lib/tailwind/tailwind.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true" />
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
@@ -22,22 +22,19 @@
                     </button>
                     <ul class="flex-col hidden list-none md:flex-row md:flex grow justify-content-end gap-4">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Asociacion">La Asociación</a>
+                            <a class="nav-link text-dark" href="#la-asociacion">La Asociación</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Materias">Materias</a>
+                            <a class="nav-link text-dark" href="#academias">Empresas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Empresas">Empresas</a>
+                            <a class="nav-link text-dark" href="#noticias">Noticias</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Noticias">Noticias</a>
+                            <a class="nav-link text-dark" href="https://pimemenorca.org/boletin-alta-socio">Asóciate</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Asociate">Asóciate</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Contact">Contacto</a>
+                            <a class="nav-link text-dark" asp-page="/Contacto">Contacto</a>
                         </li>
                     </ul>
                 </div>
@@ -65,10 +62,16 @@
                         }
                     }
                     </ul>
-                    <form >
-                        <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2">
-                        <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05]">Buscar</button>
+                    <form class="w-full flex items-center justify-stretch gap-2 max-w-7xl mx-auto">
+                        <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2 basis-3/4">
+                        <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05] basis-1/4">Buscar</button>
                     </form>
+                    <div class="logos-container">
+                        <img src="~/assets/images/logo_pime.jpg" alt="Logo PIME" class="h-15" onclick="window.location.href='https://www.pimemenorca.org/'" style="cursor: pointer;">
+                        <p class="text-azul"> <a asp-page="/CondicionesUso" class="text-azul p-1 hover:text-blue-700">Condiciones de Uso</a>|<a asp-page="/Privacidad" class="text-azul p-1 hover:text-blue-700">Política de Privacidad</a> </p>
+                        <img src="~/assets/images/MenorcaTalaiotica.png" alt="Logo Menorca Talaiotica" class="h-15" onclick="window.location.href='https://www.menorcatalayotica.info/'" style="cursor: pointer;">
+                        <img src="~/assets/images/CIME.png" alt="Logo Consell Insular" class="h-15" onclick="window.location.href='https://www.cime.es/'" style="cursor: pointer;">
+                    </div>
             
                 </div>
             </footer>
