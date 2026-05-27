@@ -12,6 +12,7 @@
     --color-gris: #676767;
     --font-primary: Raleway, sans-serif;
     --color-blanco: #fafafa;
+    --color-azul-hover: #5a74a0;
 }
 
 @layer components{
@@ -91,15 +92,35 @@
 
     .noticia {
         @apply bg-blanco rounded-xl text-center transition-all duration-500 flex items-center hover:transform-[scale(1.02)] shadow-2xl p-4 flex-col overflow-hidden border border-gris/20 hover:shadow-2xl;
+        flex: 0 0 calc(25% - 1.125rem);
+        min-width: 220px;
+        scroll-snap-align: start;
     }
 
     .noticias {
         @apply w-full px-6 mb-4 ;
     }
 
-    .noticias-container{
-        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto;
+    .noticias-wrapper {
+        @apply relative max-w-7xl mx-auto;
     }
+
+    .noticias-container{
+        @apply flex gap-6 overflow-x-auto pb-4;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .noticias-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .noticias-btn {
+        @apply absolute top-1/2 -translate-y-1/2 z-10 bg-azul text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-azul-hover transition-all duration-200 cursor-pointer;
+    }
+
+    .noticias-btn-prev { left: -1.25rem; }
+    .noticias-btn-next { right: -1.25rem; }
 
     .academias {
         @apply w-full px-6 mb-4 max-w-7xl mx-auto;

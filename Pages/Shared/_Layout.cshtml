@@ -13,74 +13,72 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow p-3">
-            <img class="navbar-brand h-20 cursor-pointer" src="~/assets/images/logo.png" alt="Academias Menorca"
-                 onclick="window.location.href='/'" />
+            <img class="navbar-brand h-20 cursor-pointer" src="~/assets/images/logo.png" alt="Academias Menorca" onclick="window.location.href='/'" />
             <div class="mobile-menu">
-                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <img src="~/assets/icons/menu-icon.svg" alt="Menu" class="h-6 w-6">
-                    </button>
-                    <ul class="flex-col hidden list-none md:flex-row md:flex grow justify-content-end gap-4">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#la-asociacion">La Asociación</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#academias">Empresas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#noticias">Noticias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="https://pimemenorca.org/boletin-alta-socio">Asóciate</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="/Contacto">Contacto</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-    
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-
-    
-        <footer class="border-t ">
-            <h4 class="text-3xl">AcademiasMenorca.com</h4>
-            <div class="container">
-                <p class="text-gray-300 text-sm text-center">Copyright &copy; 2026. todos los derechos reservados.</p>
-                <p class="text-gray-300 text-sm text-center">La copia y el uso de los textos, imágenes y archivos contenidos en este sitio web están protegidos por las leyes generales de autoría y copyright. Todos los textos pueden ser reproducidos parcialmente mediante cita indicando su procedencia. La difusión de cualquiera de las imágenes de esta web está sujeta a la normativa de la Ley de la Propiedad Intelectual.</p>
+                </button>
+                <ul class="flex-col hidden list-none md:flex-row md:flex grow justify-content-end gap-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/#la-asociacion">La Asociación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/#academias">Empresas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/#noticias">Noticias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="https://pimemenorca.org/boletin-alta-socio">Asóciate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Contacto">Contacto</a>
+                    </li>
+                </ul>
             </div>
-            <div class="busqueda-footer">
-                <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
-                    @{
-                        foreach (var categoria in _categoriasRepository.ObtenerTodasCategorias())
-                        {
-                            var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
-                            <li class="bg-azul w-32 rounded-lg p-1 hover:scale-[1.05] text-center text-sm"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
-                        }
+        </nav>
+    </header>
+    
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    
+    <footer class="border-t ">
+        <h4 class="text-3xl">AcademiasMenorca.com</h4>
+        <div class="container">
+            <p class="text-gray-300 text-sm text-center">Copyright &copy; 2026. todos los derechos reservados.</p>
+            <p class="text-gray-300 text-sm text-center">La copia y el uso de los textos, imágenes y archivos contenidos en este sitio web están protegidos por las leyes generales de autoría y copyright. Todos los textos pueden ser reproducidos parcialmente mediante cita indicando su procedencia. La difusión de cualquiera de las imágenes de esta web está sujeta a la normativa de la Ley de la Propiedad Intelectual.</p>
+        </div>
+        <div class="busqueda-footer">
+            <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
+                @{
+                    foreach (var categoria in _categoriasRepository.ObtenerTodasCategorias())
+                    {
+                        var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
+                        <li class="bg-azul w-32 rounded-lg p-1 hover:scale-[1.05] text-center text-sm"><a class="no-underline text-white" href="@url">@categoria.Nombre</a></li>
                     }
-                    </ul>
-                    <form class="w-full flex items-center justify-stretch gap-2 max-w-7xl mx-auto">
-                        <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2 basis-3/4">
-                        <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05] basis-1/4">Buscar</button>
-                    </form>
-                    <div class="logos-container">
-                        <img src="~/assets/images/logo_pime.jpg" alt="Logo PIME" class="h-15" onclick="window.location.href='https://www.pimemenorca.org/'" style="cursor: pointer;">
-                        <p class="text-azul"> <a asp-page="/CondicionesUso" class="text-azul p-1 hover:text-blue-700">Condiciones de Uso</a>|<a asp-page="/Privacidad" class="text-azul p-1 hover:text-blue-700">Política de Privacidad</a> </p>
-                        <img src="~/assets/images/MenorcaTalaiotica.png" alt="Logo Menorca Talaiotica" class="h-15" onclick="window.location.href='https://www.menorcatalayotica.info/'" style="cursor: pointer;">
-                        <img src="~/assets/images/CIME.png" alt="Logo Consell Insular" class="h-15" onclick="window.location.href='https://www.cime.es/'" style="cursor: pointer;">
-                    </div>
+                }
+            </ul>
+            <form class="w-full flex items-center justify-stretch gap-2 max-w-7xl mx-auto">
+                <input type="text" placeholder="Buscar..." class=" bg-azul placeholder:text-white text-white rounded-md p-2 basis-3/4">
+                <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05] basis-1/4">Buscar</button>
+            </form>
+            <div class="logos-container">
+                <img src="~/assets/images/logo_pime.jpg" alt="Logo PIME" class="h-15" onclick="window.location.href='https://www.pimemenorca.org/'" style="cursor: pointer;">
+                    <p class="text-azul"> <a asp-page="/CondicionesUso" class="text-azul p-1 hover:text-blue-700">Condiciones de Uso</a>|<a asp-page="/Privacidad" class="text-azul p-1 hover:text-blue-700">Política de Privacidad</a> </p>
+                <img src="~/assets/images/MenorcaTalaiotica.png" alt="Logo Menorca Talaiotica" class="h-15" onclick="window.location.href='https://www.menorcatalayotica.info/'" style="cursor: pointer;">
+                <img src="~/assets/images/CIME.png" alt="Logo Consell Insular" class="h-15" onclick="window.location.href='https://www.cime.es/'" style="cursor: pointer;">
+            </div>
             
-                </div>
-            </footer>
+        </div>
+    </footer>
 
-            <script src="~/lib/jquery/dist/jquery.min.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-            @await RenderSectionAsync("Scripts", required: false)
-        </body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 
-    </html>
+</html>

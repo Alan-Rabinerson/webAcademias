@@ -94,22 +94,34 @@
 
         </div>
     </section>
-    <section class="noticias fade-in">
+    <section class="noticias fade-in mb-15">
         <h2 class="text-2xl font-bold mb-4 mt-4">Noticias</h2>
-        <div class="noticias-container" id="noticias">
-            @{
-                var noticias = Model.noticias;
-                foreach (var noticia in noticias) {
-                    <a href="/noticia/@noticia.NotId" class="noticia">
-                        <img src="@noticia.NotImagenPortadaNavigation?.ImgPath" alt='@(string.IsNullOrWhiteSpace(noticia.NotImagenPortadaNavigation?.ImgNombre) ? "Imagen de noticia" : noticia.NotImagenPortadaNavigation?.ImgNombre)' class="w-full h-auto rounded-md mb-4 " />
-                        <h3 class="text-lg font-semibold p-4">@noticia.NotTitulo</h3>
-                        <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.NotFecha.ToString("d 'de' MMMM 'de' yyyy")</span>
-                        <p class="text-gris text-base mt-2 p-4">@noticia.NotSubtitulo</p>
-                    </a>
+        <div class="noticias-wrapper">
+            <button class="noticias-btn noticias-btn-prev" onclick="scrollNoticias(-1)" aria-label="Anterior">&#8592;</button>
+            <div class="noticias-container" id="noticias">
+                @{
+                    var noticias = Model.noticias;
+                    foreach (var noticia in noticias) {
+                        <a href="/noticia/@noticia.NotId" class="noticia">
+                            <img src="@noticia.NotImagenPortadaNavigation?.ImgPath" alt='@(string.IsNullOrWhiteSpace(noticia.NotImagenPortadaNavigation?.ImgNombre) ? "Imagen de noticia" : noticia.NotImagenPortadaNavigation?.ImgNombre)' class="w-full h-auto rounded-md mb-4 " />
+                            <h3 class="text-lg font-semibold p-4">@noticia.NotTitulo</h3>
+                            <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.NotFecha.ToString("d 'de' MMMM 'de' yyyy")</span>
+                            <p class="text-gris text-base mt-2 p-4">@noticia.NotSubtitulo</p>
+                        </a>
+                    }
                 }
-            }
+            </div>
+            <button class="noticias-btn noticias-btn-next" onclick="scrollNoticias(1)" aria-label="Siguiente">&#8594;</button>
         </div>
-    </section>    
+    </section>
+    <script>
+        function scrollNoticias(dir) {
+            const container = document.getElementById('noticias');
+            const card = container.querySelector('.noticia');
+            const cardWidth = card ? card.offsetWidth + 24 : 300;
+            container.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+        }
+    </script>    
     <section class="academias" id="academias">
         <h2 class="text-2xl font-bold mb-4 mt-4">Centros destacados</h2>
         <div class="grid grid-cols-2 gap-6">
@@ -117,7 +129,10 @@
                 var academias = Model.academias;
                 foreach (var academia in academias) {
                     <a href="/academia/@(string.IsNullOrWhiteSpace(academia.Nombre) ? "#" : academia.Nombre.Replace(" ", "-"))" class="academia">
-                        <img src="@academia.LogoRuta" alt='@(string.IsNullOrWhiteSpace(academia.Nombre) ? academia.Nombre : "Logo de academia")' class="w-30 z-50 h-30 rounded-full -top-1 left-4 absolute" />
+                        @if (!string.IsNullOrWhiteSpace(academia.LogoRuta))
+                        {
+                            <img src="@academia.LogoRuta" alt='@(string.IsNullOrWhiteSpace(academia.Nombre) ? academia.Nombre : "Logo de academia")' class="w-30 z-50 h-30 rounded-full -top-1 left-4 absolute" />
+                        }
                         <h3 class="text-lg font-semibold p-4">@academia.Nombre</h3>
                         <span class="text-azul text-sm font-semibold p-4 ">@(!string.IsNullOrWhiteSpace(academia.Poblacion) ? $"Población: {academia.Poblacion}" : string.Empty)</span>
                         <p class="text-gris text-base mt-2 p-4">@((academia.Descripcion ?? string.Empty).Replace("<p>", " ").Replace("</p>", " "))</p>
