@@ -78,7 +78,7 @@ namespace WebAcademias.Data
                                Poblacion = aca.AcaPoblacion,
                                LogoRuta = img != null ? img.ImgPath : aca.AcaLogo
                            };
-            return sqlQuery.ToList();
+            return [.. sqlQuery];
         }
 
         public List<Academia> BuscarAcademiasPorCategoria(long id)
@@ -97,6 +97,44 @@ namespace WebAcademias.Data
                         };
             return query.ToList();
         }
+
+        public AcademiaDetalle? ObtenerAcademiaDetallesPorNombre(string nombreSlug)
+        {
+            string nombreBusqueda = nombreSlug.Replace("-", " ");
+
+            var aca = _context.AcaAcademias
+                .Include(a => a.AcaDirecciones)
+                .Include(a => a.Cats)
+                .FirstOrDefault(a => a.AcaNombre.ToLower() == nombreBusqueda.ToLower());
+
+            if (aca == null) return null;
+
+            var telefonos = _context.AcaTelefonos
+                .Where(t => t.TelAcaId == aca.AcaId)
+                .ToList();
+
+            var logoPath = _context.AcaImagenes
+                .Where(i => i.ImgPath == aca.AcaLogo)
+                .Select(i => i.ImgPath)
+                .FirstOrDefault() ?? aca.AcaLogo;
+
+            return new AcademiaDetalle
+            {
+                Id = aca.AcaId,
+                Nombre = aca.AcaNombre,
+                Descripcion = aca.AcaDescripcion,
+                LogoRuta = logoPath,
+                Poblacion = aca.AcaPoblacion,
+                Url = aca.AcaUrl,
+                Facebook = aca.AcaFacebook,
+                Instagram = aca.AcaInstagram,
+                Twitter = aca.AcaTwitter,
+                Servicios = aca.AcaServicios,
+                Direcciones = aca.AcaDirecciones.ToList(),
+                Telefonos = telefonos,
+                Categorias = aca.Cats.Select(c => c.CatNombre).ToList()
+            };
+        }
 }
 
 
@@ -114,5 +152,22 @@ public class Academia
     {
         throw new NotImplementedException();
     }
+}
+
+public class AcademiaDetalle
+{
+    public long Id { get; set; }
+    public string? Nombre { get; set; }
+    public string? Descripcion { get; set; }
+    public string? LogoRuta { get; set; }
+    public string? Poblacion { get; set; }
+    public string? Url { get; set; }
+    public string? Facebook { get; set; }
+    public string? Instagram { get; set; }
+    public string? Twitter { get; set; }
+    public string? Servicios { get; set; }
+    public List<AcaDireccione> Direcciones { get; set; } = [];
+    public List<AcaTelefono> Telefonos { get; set; } = [];
+    public List<string> Categorias { get; set; } = [];
 }
 }

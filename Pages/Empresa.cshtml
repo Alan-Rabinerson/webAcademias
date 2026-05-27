@@ -1,0 +1,221 @@
+@page "/academia/{nombre}"
+@model WebAcademias.Pages.EmpresaModel
+@using WebAcademias.Models
+@{
+    var academia = Model.academia!;
+}
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+    @* Breadcrumb *@
+    <nav class="text-sm text-gris mb-6">
+        <a href="/" class="hover:text-azul">Inicio</a>
+        <span class="mx-2">/</span>
+        <a href="/empresas" class="hover:text-azul">Academias</a>
+        <span class="mx-2">/</span>
+        <span class="text-negro-texto">@academia.Nombre</span>
+    </nav>
+
+    @* Cabecera *@
+    <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-8 border-b border-gris/20">
+        @if (!string.IsNullOrWhiteSpace(academia.LogoRuta))
+        {
+            <img src="@academia.LogoRuta" alt="Logo de @academia.Nombre" class="w-32 h-32 rounded-full object-cover shrink-0 shadow-md border-2 border-azul/30" />
+        }
+        else
+        {
+            <div class="w-32 h-32 rounded-full bg-azul/20 flex items-center justify-center shrink-0 shadow-md">
+                <span class="text-azul text-4xl font-bold">@(academia.Nombre?.Substring(0, 1).ToUpper())</span>
+            </div>
+        }
+        <div class="flex-1 text-center md:text-left">
+            <h1 class="text-3xl font-bold text-negro-texto mb-2">@academia.Nombre</h1>
+            @if (!string.IsNullOrWhiteSpace(academia.Poblacion))
+            {
+                <p class="flex items-center justify-center md:justify-start gap-1 text-gris mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-azul shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    @academia.Poblacion
+                </p>
+            }
+            @if (academia.Categorias.Count > 0)
+            {
+                <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                    @foreach (var cat in academia.Categorias)
+                    {
+                        <span class="bg-azul/10 text-azul text-xs font-semibold px-3 py-1 rounded-full border border-azul/30">@cat</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    @* Contenido principal + barra lateral *@
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        @* Columna principal *@
+        <div class="md:col-span-2 flex flex-col gap-8">
+
+            @if (!string.IsNullOrWhiteSpace(academia.Descripcion))
+            {
+                <section>
+                    <h2 class="text-xl font-bold text-negro-texto mb-3 pb-2 border-b border-gris/20">Sobre nosotros</h2>
+                    <div class="text-gris leading-relaxed text-justify">
+                        @Html.Raw(academia.Descripcion)
+                    </div>
+                </section>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(academia.Servicios))
+            {
+                <section>
+                    <h2 class="text-xl font-bold text-negro-texto mb-3 pb-2 border-b border-gris/20">Servicios</h2>
+                    <div class="text-gris leading-relaxed">
+                        @Html.Raw(academia.Servicios)
+                    </div>
+                </section>
+            }
+
+            @if (academia.Direcciones.Count > 0)
+            {
+                <section>
+                    <h2 class="text-xl font-bold text-negro-texto mb-3 pb-2 border-b border-gris/20">Cómo llegar</h2>
+                    <div class="flex flex-col gap-4">
+                        @foreach (var dir in academia.Direcciones)
+                        {
+                            var dirTexto = string.Join(", ", new[] {
+                                string.IsNullOrWhiteSpace(dir.DirCalle) ? null : dir.DirCalle + (string.IsNullOrWhiteSpace(dir.DirNumero) ? "" : " " + dir.DirNumero),
+                                dir.DirCodigoPostal,
+                                dir.DirCiudad,
+                                dir.DirProvincia
+                            }.Where(s => !string.IsNullOrWhiteSpace(s)));
+
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-azul shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <div>
+                                    <p class="text-negro-texto">@dirTexto</p>
+                                    @if (!string.IsNullOrWhiteSpace(dirTexto))
+                                    {
+                                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(dirTexto)"
+                                           target="_blank" rel="noopener noreferrer"
+                                           class="text-azul text-sm hover:underline mt-1 inline-block">
+                                            Ver en Google Maps →
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (dir.DirLatitud.HasValue && dir.DirLongitud.HasValue)
+                            {
+                                <div class="rounded-xl overflow-hidden shadow-md h-64 mt-2">
+                                    <iframe
+                                        src="https://www.openstreetmap.org/export/embed.html?bbox=@((double)dir.DirLongitud - 0.005)%2C@((double)dir.DirLatitud - 0.005)%2C@((double)dir.DirLongitud + 0.005)%2C@((double)dir.DirLatitud + 0.005)&layer=mapnik&marker=@dir.DirLatitud%2C@dir.DirLongitud"
+                                        class="w-full h-full border-0"
+                                        loading="lazy"
+                                        title="Mapa de ubicación">
+                                    </iframe>
+                                </div>
+                            }
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+
+        @* Barra lateral de contacto *@
+        <aside class="flex flex-col gap-4">
+            <div class="bg-blanco rounded-xl shadow-md border border-gris/20 p-5 sticky top-4">
+                <h3 class="text-lg font-bold text-negro-texto mb-4 pb-2 border-b border-gris/20">Contacto</h3>
+
+                @if (academia.Telefonos.Count > 0)
+                {
+                    <div class="flex flex-col gap-3 mb-4">
+                        @foreach (var tel in academia.Telefonos)
+                        {
+                            <a href="tel:@tel.TelNumero" class="flex items-center gap-3 text-negro-texto hover:text-azul transition-colors group">
+                                <span class="w-9 h-9 rounded-full bg-azul/10 flex items-center justify-center group-hover:bg-azul/20 shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-azul" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <p class="text-sm font-medium">@tel.TelNumero</p>
+                                    @if (!string.IsNullOrWhiteSpace(tel.TelNombre))
+                                    {
+                                        <p class="text-xs text-gris">@tel.TelNombre</p>
+                                    }
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(academia.Url))
+                {
+                    <a href="@academia.Url" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-3 text-negro-texto hover:text-azul transition-colors group mb-3">
+                        <span class="w-9 h-9 rounded-full bg-azul/10 flex items-center justify-center group-hover:bg-azul/20 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-azul" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                            </svg>
+                        </span>
+                        <span class="text-sm font-medium truncate">Sitio web</span>
+                    </a>
+                }
+
+                @{
+                    bool hasSocial = !string.IsNullOrWhiteSpace(academia.Facebook) ||
+                                     !string.IsNullOrWhiteSpace(academia.Instagram) ||
+                                     !string.IsNullOrWhiteSpace(academia.Twitter);
+                }
+                @if (hasSocial)
+                {
+                    <div class="pt-3 border-t border-gris/20">
+                        <p class="text-xs text-gris uppercase font-semibold mb-3 tracking-wide">Redes sociales</p>
+                        <div class="flex gap-3">
+                            @if (!string.IsNullOrWhiteSpace(academia.Facebook))
+                            {
+                                <a href="@academia.Facebook" target="_blank" rel="noopener noreferrer"
+                                   class="w-9 h-9 rounded-full bg-[#1877F2]/10 flex items-center justify-center hover:bg-[#1877F2]/20 transition-colors"
+                                   title="Facebook">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                    </svg>
+                                </a>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(academia.Instagram))
+                            {
+                                <a href="@academia.Instagram" target="_blank" rel="noopener noreferrer"
+                                   class="w-9 h-9 rounded-full bg-[#E4405F]/10 flex items-center justify-center hover:bg-[#E4405F]/20 transition-colors"
+                                   title="Instagram">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                    </svg>
+                                </a>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(academia.Twitter))
+                            {
+                                <a href="@academia.Twitter" target="_blank" rel="noopener noreferrer"
+                                   class="w-9 h-9 rounded-full bg-[#1DA1F2]/10 flex items-center justify-center hover:bg-[#1DA1F2]/20 transition-colors"
+                                   title="Twitter / X">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1DA1F2]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                    </svg>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <a href="/empresas" class="text-center bg-azul text-white rounded-xl py-3 px-4 hover:bg-azul/80 transition-colors text-sm font-semibold">
+                ← Ver todas las academias
+            </a>
+        </aside>
+    </div>
+</div>

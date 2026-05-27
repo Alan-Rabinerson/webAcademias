@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebAcademias.Models;
 using WebAcademias.Data;
 
 namespace WebAcademias.Pages
@@ -24,7 +25,7 @@ namespace WebAcademias.Pages
             porcentajes = _categoriasRepository.ObtenerPorcentajesMaterias();       
             academias = _academiasRepository.ObtenerTodasAcademias();
         }
-        public List<Noticia> noticias = [];
+        public List<GesNoticia> noticias = [];
         public void OnGet()
         {
             noticias = _noticiasRepository.ObtenerUltimasNoticiasIndex();

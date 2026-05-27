@@ -1,0 +1,48 @@
+@page "/{filtro?}"
+@model EmpresasModel
+@using WebAcademias.Data
+@{
+    ViewData["Title"] = "Academias";
+}
+
+<div class="text-center py-3">
+    <section class="busqueda py-3">
+        <h3 class="text-negro-texto font-thin text-4xl">Buscador de centros y servicios</h3>
+        <div class="botones">
+            <ul class="grid items-center grid-cols-10 justify-center gap-2 place-items-center">
+                <li class="bg-azul w-27.5 rounded-lg p-2 hover:scale-[1.05]">
+                    <a class="no-underline text-white" href="/empresas">Todos</a>
+                </li>
+                @foreach (var categoria in Model.categorias)
+                {
+                    var url = "/" + categoria.Nombre.ToLower().Replace(" ", "-");
+                    var isActive = Model.FiltroActivo?.ToLower() == categoria.Nombre.ToLower().Replace(" ", "-");
+                    <li class="@(isActive ? "bg-azul-hover" : "bg-azul") w-27.5 rounded-lg p-2 hover:scale-[1.05]">
+                        <a class="no-underline text-white" href="@url">@categoria.Nombre</a>
+                    </li>
+                }
+            </ul>
+            <form method="get" action="/empresas" class="w-full flex items-center justify-stretch gap-2 max-w-7xl mx-auto">
+                <input type="text" name="Search" value="@Model.Search" placeholder="Buscar centro..." class="bg-azul placeholder:text-white text-white rounded-md p-2 basis-3/4">
+                <button type="submit" class="bg-white text-azul rounded-md p-2 hover:bg-azul-hover border border-azul hover:scale-[1.05] basis-1/4">Buscar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="academias" id="academias">
+        <h2 class="text-2xl font-bold mb-4 mt-4">Centros con cursos de @Model.FiltroActivo</h2>
+        <div class="grid grid-cols-2 gap-6">
+            @{
+                foreach (var academia in Model.academias)
+                {
+                    <a href="/academia/@(string.IsNullOrWhiteSpace(academia.Nombre) ? "#" : academia.Nombre.Replace(" ", "-"))" class="academia">
+                        <img src="@academia.LogoRuta" alt='@(string.IsNullOrWhiteSpace(academia.Nombre) ? academia.Nombre : "Logo de academia")' class="w-30 z-50 h-30 rounded-full -top-1 left-4 absolute" />
+                        <h3 class="text-lg font-semibold p-4">@academia.Nombre</h3>
+                        <span class="text-azul text-sm font-semibold p-4">@(!string.IsNullOrWhiteSpace(academia.Poblacion) ? $"Población: {academia.Poblacion}" : string.Empty)</span>
+                        <p class="text-gris text-base mt-2 p-4">@((academia.Descripcion ?? string.Empty).Replace("<p>", " ").Replace("</p>", " "))</p>
+                    </a>
+                }
+            }
+        </div>
+    </section>
+</div>

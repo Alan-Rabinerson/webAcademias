@@ -12,7 +12,7 @@ namespace WebAcademias.Pages
         {
             _noticiasRepository = noticiasRepository;
         }
-        public Noticia? noticia;
+        public GesNoticia? noticia;
 
         public IActionResult OnGet(long id)
         {

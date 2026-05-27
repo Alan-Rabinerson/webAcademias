@@ -100,11 +100,11 @@
             @{
                 var noticias = Model.noticias;
                 foreach (var noticia in noticias) {
-                    <a href="/noticia/@noticia.Id" class="noticia">
-                        <img src="@noticia.ImagenRuta" alt='@(string.IsNullOrWhiteSpace(noticia.ImagenNombre) ? "Imagen de noticia" : noticia.ImagenNombre)' class="w-full h-auto rounded-md mb-4 " />
-                        <h3 class="text-lg font-semibold p-4">@noticia.Titulo</h3>
-                        <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.Fecha.ToString("d 'de' MMMM 'de' yyyy")</span>
-                        <p class="text-gris text-base mt-2 p-4">@noticia.Subtitulo</p>
+                    <a href="/noticia/@noticia.NotId" class="noticia">
+                        <img src="@noticia.NotImagenPortadaNavigation?.ImgPath" alt='@(string.IsNullOrWhiteSpace(noticia.NotImagenPortadaNavigation?.ImgNombre) ? "Imagen de noticia" : noticia.NotImagenPortadaNavigation?.ImgNombre)' class="w-full h-auto rounded-md mb-4 " />
+                        <h3 class="text-lg font-semibold p-4">@noticia.NotTitulo</h3>
+                        <span class="text-azul-oscuro text-sm font-semibold p-4 ">Fecha: @noticia.NotFecha.ToString("d 'de' MMMM 'de' yyyy")</span>
+                        <p class="text-gris text-base mt-2 p-4">@noticia.NotSubtitulo</p>
                     </a>
                 }
             }
